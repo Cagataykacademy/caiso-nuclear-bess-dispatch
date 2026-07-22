@@ -34,3 +34,12 @@ github_upload/
 # - paper/: manuscript & submission documents (kept private until publication)
 Author_Notes.pdf
 paper/
+
+# Superseded/iteration files preserved locally for provenance, excluded from
+# the public reproduction package.
+archive/
+
+# Manuscript-generation scripts (produce private submission documents)
+scripts/10_write_paper_docx.py
+scripts/15_cover_letter.py
+scripts/30_highlights.py

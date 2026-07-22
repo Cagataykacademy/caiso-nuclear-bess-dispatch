@@ -156,8 +156,8 @@ solver = pd.read_csv(TABLES / "solver_quality.csv")
 sens_bess = pd.read_csv(TABLES / "sensitivity_bess.csv")
 sens_nuc = pd.read_csv(TABLES / "sensitivity_nuclear.csv")
 sens_gas = pd.read_csv(TABLES / "sensitivity_gas_price.csv")
-fi_netload = pd.read_csv(TABLES / "feature_importance_demand_dayahead.csv")
-fi_price = pd.read_csv(TABLES / "feature_importance_price_dayahead.csv")
+# (stale feature-importance CSVs no longer loaded; fig09 is produced by
+#  27_feature_importance_fix.py from the canonical model)
 
 print("Data loaded.\n")
 
