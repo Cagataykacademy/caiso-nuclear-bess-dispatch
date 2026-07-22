@@ -1,0 +1,8 @@
+Phase,Metric,Value
+Data Acquisition,Total Records,"8,760"
+EDA,Demand Range (MW),"14,541 - 44,007"
+Preprocessing,Features Generated,49
+ML Modeling,Net Load MAE (MW),33.67
+ML Modeling,Net Load R²,0.9995
+MILP Optimization,Optimal Cost ($/MWh),42.36
+MILP Optimization,Nuclear Cost Savings (%),9.2%

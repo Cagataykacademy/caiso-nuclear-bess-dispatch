@@ -1,0 +1,5 @@
+Plan,Plan_Cost_MWh,Realized_Cost_MWh,Realized_Shed_MWh,Binaries,Plan_Solve_s
+Deterministic (γ=0),41.84,42.15,0.0,840,0.43
+Robust (γ=0.5),42.63,42.16,0.0,840,0.42
+"Robust (γ=1, Q90)",43.59,42.16,0.0,840,0.3
+SP (3-scenario),42.04,42.15,0.0,1176,1.17

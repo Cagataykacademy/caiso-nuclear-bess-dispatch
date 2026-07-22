@@ -1,0 +1,3 @@
+Configuration,S1_Cost_MWh,S4_Cost_MWh,Nuclear_Premium_pct,S1_Startups,S4_Startups
+"2x5,000 MW (paper baseline)",41.8396,47.352,13.175,1.0,0
+"4x2,500 MW (finer granularity)",41.8433,47.352,13.165,1.0,0

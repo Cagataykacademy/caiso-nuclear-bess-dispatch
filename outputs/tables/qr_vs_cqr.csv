@@ -1,0 +1,3 @@
+Interval,Coverage_pct,Mean_Width_MW,Winkler_MW
+"QR (uncalibrated, q10-q90)",61.1,3094.0,10874.0
+CQR (conformalized),88.8,5182.0,8346.0

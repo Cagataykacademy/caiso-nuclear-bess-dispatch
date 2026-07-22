@@ -1,0 +1,7 @@
+Scenario,Cost_MWh,CO2_tonnes,CO2_kg_MWh,Shed_MWh
+S1_Deterministic,41.84,1029389.0,343.5,0.0
+S2_Worst_Case,43.59,1253822.0,360.0,0.0
+S3_Best_Case,40.25,864600.0,331.8,0.0
+S4_No_Nuclear,47.35,1207497.0,403.0,0.0
+S5_Small_BESS,42.16,1041449.0,347.5,0.0
+S6_Robust,42.63,1138868.0,351.5,0.0

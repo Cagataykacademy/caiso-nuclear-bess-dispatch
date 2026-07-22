@@ -1,0 +1,4 @@
+Scenario,Cost_MWh,Shed_MWh,BESS_Cycles
+Oracle (perfect forecast),42.15,0.0,2.89
+"ML day-ahead (XGBoost, MAE=1,429 MW)",41.84,0.0,5.07
+VOPI (ML cost premium),-0.31,—,-0.74%

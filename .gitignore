@@ -1,0 +1,22 @@
+# Regeneratable trained model checkpoints (large, superseded variants included) -
+# reproducible by rerunning the pipeline scripts; not needed for the data/results deposit.
+outputs/models/
+
+# LaTeX build artifacts
+paper/*.aux
+paper/*.log
+paper/*.out
+paper/*.spl
+paper/*.bbl
+paper/*.blg
+
+# Python
+__pycache__/
+*.pyc
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Claude Code local session/config state - not part of the research artifact
+.claude/

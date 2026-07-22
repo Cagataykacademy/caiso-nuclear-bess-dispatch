@@ -1,0 +1,5 @@
+Week,Case,Start,NL_Mean_MW,NL_Min_MW,NL_Max_MW,Cost_MWh,Shed_MWh,Avg_Peaker_MW,Avg_Import_MW,Solve_s,Premium_pct
+Spring (deepest duck),with nuclear,2023-03-13,24063.0,12398,38640,34.81,0.0,0.0,0.0,2.3,14.9
+Spring (deepest duck),no nuclear,2023-03-13,24063.0,12398,38640,39.98,0.0,0.0,0.0,0.94,14.9
+November (shoulder),with nuclear,2023-11-01,26088.0,15872,42396,34.52,0.0,0.0,0.0,1.88,15.8
+November (shoulder),no nuclear,2023-11-01,26088.0,15872,42396,39.97,0.0,0.0,0.0,1.28,15.8

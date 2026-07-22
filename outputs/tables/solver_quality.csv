@@ -1,0 +1,7 @@
+Scenario,Status,Solve_Time_s,Objective,Gap_Pct,Variables,Constraints,Binary_Vars,Cost_MWh,Shed_MWh,SoC_End_pct
+S1_Deterministic,optimal,0.454,125375288.0,0.0,2688,3685,168,41.84,0.0,35.0
+S2_Worst_Case,optimal,0.431,151824455.0,0.0,2688,3685,168,43.59,0.0,35.0
+S3_Best_Case,optimal,0.387,104873232.0,0.0,2688,3685,168,40.25,0.0,35.0
+S4_No_Nuclear,optimal,0.388,141893600.0,0.0,2688,3351,168,47.35,0.0,35.0
+S5_Small_BESS,optimal,0.516,126332939.0,0.0,2688,3685,168,42.16,0.0,7.0
+S6_Robust,optimal,0.442,138115433.0,0.0,2688,3685,168,42.63,0.0,35.0

@@ -1,0 +1,5 @@
+Season,Net_Load_Mean_MW,Net_Load_Min_MW,Net_Load_Max_MW,Cost_MWh,Avg_Nuclear_MW,Avg_CCGT_MW,Avg_Peaker_MW,Avg_Import_MW,Shed_MWh,Curt_MWh,BESS_Cycles,CCGT_Startups,Solve_s
+Winter (Jan 23–29),18851.0,9089.0,27383.0,42.27,2256.0,9939.0,402.0,6240.0,0.0,0.0,2.37,2.0,0.43
+Spring (Apr 10–16),14439.0,-2852.0,23919.0,39.85,2256.0,8504.0,0.0,3718.0,0.0,0.0,3.42,4.0,0.48
+Summer (Aug 7–13),22366.0,11285.0,36999.0,45.16,2256.0,10000.0,2604.0,7480.0,0.0,0.0,2.02,0.0,0.38
+Fall (Nov 1–7),18407.0,7648.0,28430.0,42.15,2256.0,9793.0,450.0,5894.0,0.0,0.0,2.89,2.0,0.51

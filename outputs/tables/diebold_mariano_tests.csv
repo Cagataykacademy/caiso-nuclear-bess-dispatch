@@ -1,0 +1,13 @@
+Target,Model_1,Model_2,DM_Statistic,p_value,Significance,Better
+Net Load,LightGBM,XGBoost,4.670988460229913,2.997537806415096e-06,***,XGBoost
+Net Load,LightGBM,RandomForest,-1.2736121168600567,0.20280091588364213,ns,LightGBM
+Net Load,LightGBM,Persistence,-5.613534019558877,1.982356057084189e-08,***,LightGBM
+Net Load,XGBoost,RandomForest,-2.2322115411155705,0.02560098499888208,**,XGBoost
+Net Load,XGBoost,Persistence,-5.95231510228289,2.643757435194516e-09,***,XGBoost
+Net Load,RandomForest,Persistence,-6.187909461967251,6.096732008131767e-10,***,RandomForest
+Price,LightGBM,XGBoost,-13.730554019695928,0.0,***,LightGBM
+Price,LightGBM,RandomForest,-0.32779327852599943,0.743067969759718,ns,LightGBM
+Price,LightGBM,Persistence,2.454516714092051,0.014107410616618354,**,Persistence
+Price,XGBoost,RandomForest,19.05766084916057,0.0,***,RandomForest
+Price,XGBoost,Persistence,16.969619181247403,0.0,***,Persistence
+Price,RandomForest,Persistence,4.602667843091583,4.17113172157535e-06,***,Persistence
