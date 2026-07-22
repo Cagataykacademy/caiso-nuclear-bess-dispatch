@@ -62,7 +62,7 @@ The integration of variable renewable energy (VRE) sources, particularly utility
 
 The duck curve poses three interconnected challenges. First, the steep evening ramp (3{,}000~MW/h or more in CAISO) demands fast-responding generation resources, straining the conventional thermal fleet. Second, mid-day over-generation risks curtailment of renewable output, eroding the economic case for further solar investment. Third, baseload generators such as nuclear plants, which operate most efficiently at near-constant output due to reactor physics and licensing constraints, face increasing pressure to either cycle, reducing efficiency and accelerating wear, or shut down entirely during low residual demand \citep{jenkins2018}. This tension is particularly acute in CAISO, where Diablo Canyon (California's last nuclear power plant at 2{,}256~MW, extended through 2030 by Senate Bill 846 \citep{sb846}) provides roughly 9\% of the state's electricity.
 
-California's grid-scale BESS capacity surpassed 5~GW by 2023, providing arbitrage value by charging during the mid-day duck belly and discharging during evening ramps \citep{denholm2023,schmidt2019}. The co-optimization of BESS with inflexible nuclear baseload under uncertain net load motivates integrating probabilistic forecasting with dispatch optimization \citep{morales2014,conejo2010}. Conformal prediction \citep{vovk2005,angelopoulos2023} has emerged as a distribution-free method providing finite-sample coverage guarantees for prediction intervals, bridging ML-based uncertainty quantification and robust operations research.
+California's grid-scale BESS capacity surpassed 5~GW by 2023, providing arbitrage value by charging during the mid-day duck belly and discharging during evening ramps \citep{denholm2022b,schmidt2019}. The co-optimization of BESS with inflexible nuclear baseload under uncertain net load motivates integrating probabilistic forecasting with dispatch optimization \citep{morales2014,conejo2010}. Conformal prediction \citep{vovk2005,angelopoulos2023} has emerged as a distribution-free method providing finite-sample coverage guarantees for prediction intervals, bridging ML-based uncertainty quantification and robust operations research.
 
 This paper makes the following contributions:
 
@@ -101,15 +101,15 @@ The remainder of this paper is organized as follows. Section~\ref{sec:lit} revie
 
 \subsection{Forecasting and Uncertainty Quantification}
 
-Short-term load forecasting has evolved from classical statistical models to modern gradient boosting methods (GBM) \citep{hong2016,hong2020review}. LightGBM \citep{ke2017} and XGBoost \citep{chen2016} consistently achieve state-of-the-art performance on tabular energy data, outperforming recurrent neural networks in the majority of benchmark studies \citep{hertel2022,shao2022,grinsztajn2022}. Forecasting \emph{net load} (demand minus solar and wind) presents challenges beyond gross demand forecasting: residual errors are non-Gaussian, heteroscedastic, and time-varying, particularly during ramp events \citep{kaur2016,wang2019}. A persistent methodological concern is data leakage, using variables unavailable at forecast time, which inflates reported accuracy; the present study enforces a strict 24-hour information cutoff.
+Short-term load forecasting has evolved from classical statistical models to modern gradient boosting methods (GBM) \citep{hong2016,hong2020review}. LightGBM \citep{ke2017} and XGBoost \citep{chen2016} consistently achieve state-of-the-art performance on tabular energy data, outperforming recurrent neural networks in the majority of benchmark studies \citep{hertel2022,grinsztajn2022}. Forecasting \emph{net load} (demand minus solar and wind) presents challenges beyond gross demand forecasting: residual errors are non-Gaussian, heteroscedastic, and time-varying, particularly during ramp events \citep{kaur2016,wang2019}. A persistent methodological concern is data leakage, using variables unavailable at forecast time, which inflates reported accuracy; the present study enforces a strict 24-hour information cutoff.
 
-Uncertainty quantification for dispatch requires calibrated prediction intervals. Standard quantile regression \citep{koenker2005} with the pinball loss \citep{gneiting2007} yields adaptive intervals but may be miscalibrated under distribution shift. Conformal prediction \citep{vovk2005} provides distribution-free finite-sample coverage guarantees, requiring only exchangeability between calibration and test data. \citet{romano2019} introduced conformalized quantile regression (CQR), combining quantile-regression adaptiveness with conformal calibration. CQR and related conformal methods have demonstrated near-nominal coverage in energy applications, including net demand \citep{stankovic2023}, electricity prices and markets \citep{kath2021,xu2023}, and under distribution shift via adaptive variants \citep{gibbs2021}. The mild violation of exchangeability in time series does not materially degrade coverage when the calibration period is temporally proximate to the test period \citep{gibbs2021}, as in our September--October calibration / November--December test split.
+Uncertainty quantification for dispatch requires calibrated prediction intervals. Standard quantile regression \citep{koenker2005} with the pinball loss \citep{gneiting2007} yields adaptive intervals but may be miscalibrated under distribution shift. Conformal prediction \citep{vovk2005} provides distribution-free finite-sample coverage guarantees, requiring only exchangeability between calibration and test data. \citet{romano2019} introduced conformalized quantile regression (CQR), combining quantile-regression adaptiveness with conformal calibration. CQR and related conformal methods have demonstrated near-nominal coverage in energy applications, including electricity prices and markets \citep{kath2021}, and under distribution shift via adaptive variants \citep{gibbs2021}. The mild violation of exchangeability in time series does not materially degrade coverage when the calibration period is temporally proximate to the test period \citep{gibbs2021}, as in our September--October calibration / November--December test split.
 
 \subsection{Dispatch Optimization and Nuclear Value}
 
 Dispatch under VRE uncertainty has been addressed via stochastic programming \citep{birge2011,papavasiliou2011}, which scales poorly with scenario count; robust optimization \citep{bertsimas2013}, which can be overly conservative; and chance-constrained formulations \citep{bienstock2014}. Budget-of-uncertainty sets \citep{bertsimas2004} offer a compact parameterization of conservatism. Data-driven approaches that use ML prediction intervals as uncertainty sets \citep{dvorkin2019} bridge these paradigms; head-to-head empirical comparisons between such interval-driven robust formulations and classical scenario-based SP under an \emph{identical} information set remain rare, a gap this paper addresses (Section~\ref{sec:sp}). Our approach follows this line: CQR provides a distribution-free interval $[\hat{q}_{0.10}(t), \hat{q}_{0.90}(t)]$ at each hour as a data-driven box uncertainty set, and the parameterized net load $P_{\text{net}}(t,\gamma) = \hat{P}(t) + \gamma\,[\hat{q}_{0.90}(t) - \hat{P}(t)]$, $\gamma \in [0,1]$, implements a budget-of-uncertainty conservatism level that inherits CQR's formal coverage guarantee, a property scenario-based sets cannot offer.
 
-The value of nuclear power in high-renewable grids has gained renewed policy relevance \citep{jenkins2018,sepulveda2018,cany2018,bistline2023}. Nuclear plants provide zero-carbon, low-marginal-cost baseload (${\sim}\$12$/MWh) but are constrained to near-constant output; under duck curve conditions this creates tension with mid-day solar surpluses, which BESS alleviates by absorbing duck-belly excess and discharging during evening ramps \citep{denholm2023,sioshansi2009}. For CAISO specifically, Diablo Canyon's 2{,}256~MW provides ${\sim}9\%$ of California's electricity and avoids roughly 7--8~Mt~CO$_2$/year. Despite its policy significance, its quantified dispatch value under actual CAISO operating conditions remains understudied; this paper addresses that gap using real 2023 hourly data and a four-season MILP analysis.
+The value of nuclear power in high-renewable grids has gained renewed policy relevance \citep{jenkins2018,sepulveda2018,cany2018,bistline2023}. Nuclear plants provide zero-carbon, low-marginal-cost baseload (${\sim}\$12$/MWh) but are constrained to near-constant output; under duck curve conditions this creates tension with mid-day solar surpluses, which BESS alleviates by absorbing duck-belly excess and discharging during evening ramps \citep{denholm2022b,sioshansi2009}. For CAISO specifically, Diablo Canyon's 2{,}256~MW provides ${\sim}9\%$ of California's electricity and avoids roughly 7--8~Mt~CO$_2$/year. Despite its policy significance, its quantified dispatch value under actual CAISO operating conditions remains understudied; this paper addresses that gap using real 2023 hourly data and a four-season MILP analysis.
 
 Taken together, the literature leaves two gaps this paper addresses jointly: the lack of a rigorous, same-information comparison between interval-driven robust optimization and classical stochastic programming (Section~\ref{sec:sp}), and the absence of an empirically grounded valuation of nuclear dispatch flexibility under real, high-renewable-penetration operating conditions (Sections~\ref{sec:results_milp}--\ref{sec:fullyear}).
 
@@ -217,7 +217,7 @@ inheriting both the adaptiveness of quantile regression and the marginal coverag
 \subsection{MILP Dispatch Formulation}
 \label{sec:milp}
 
-We formulate a 168-hour (one-week) economic dispatch as a MILP. The weekly horizon captures the full weekday/weekend periodicity of CAISO net load and BESS cycling: a 24-h horizon undervalues inter-day arbitrage, while annual models sacrifice hourly duck curve dynamics. The formulation is single-bus (copper plate), standard for system-level weekly dispatch studies \citep{jenkins2018,denholm2023}; this assumption is empirically validated by a two-zone extension below. The model is solved with the open-source HiGHS solver \citep{huangfu2018} via Pyomo \citep{hart2017}.
+We formulate a 168-hour (one-week) economic dispatch as a MILP. The weekly horizon captures the full weekday/weekend periodicity of CAISO net load and BESS cycling: a 24-h horizon undervalues inter-day arbitrage, while annual models sacrifice hourly duck curve dynamics. The formulation is single-bus (copper plate), standard for system-level weekly dispatch studies \citep{jenkins2018,denholm2022b}; this assumption is empirically validated by a two-zone extension below. The model is solved with the open-source HiGHS solver \citep{huangfu2018} via Pyomo \citep{hart2017}.
 
 \textbf{Two-tier gas fleet with unit commitment.} The CCGT fleet (10{,}000~MW) is represented as two aggregate 5{,}000~MW units with explicit commitment binaries $u^{\text{ccgt}}_{t,k}$ and startup indicators $y^{\text{ccgt}}_{t,k}$: variable cost \$40/MWh, startup cost \$25{,}000/event (${\approx}\$5$/MW warm start; \citealp{nrelatb2023}), minimum load 1{,}500~MW when committed, minimum up/down times of 4~h/2~h, and ramp $\pm 800$~MW/h per unit. Simple-cycle peakers (10{,}000~MW aggregate) are continuous with cost \$65/MWh and ramp $\pm 5{,}000$~MW/h. This two-tier structure exposes the flexibility premium that single-tier gas formulations conceal.
 
@@ -296,7 +296,7 @@ Persistence     & 1{,}753 & 2{,}783 & 0.736 & ---   & ---   & baseline \\
 \end{tabular}}
 \end{table}
 
-The deep learning baselines underperform even persistence: the LSTM's overfit gap (train $R^2 = 0.924$ vs.\ test 0.676) indicates that ${\sim}5{,}700$ training samples are insufficient for a recurrent architecture to learn generalizable temporal dependencies, while the MLP overfits severely (gap 0.514). This confirms, for the tested recurrent and feedforward architectures, the documented advantage of GBM on moderate-scale tabular energy data \citep{hertel2022,shao2022,grinsztajn2022}; we do not exclude that attention-based architectures with larger training corpora could close the gap.
+The deep learning baselines underperform even persistence: the LSTM's overfit gap (train $R^2 = 0.924$ vs.\ test 0.676) indicates that ${\sim}5{,}700$ training samples are insufficient for a recurrent architecture to learn generalizable temporal dependencies, while the MLP overfits severely (gap 0.514). This confirms, for the tested recurrent and feedforward architectures, the documented advantage of GBM on moderate-scale tabular energy data \citep{hertel2022,grinsztajn2022}; we do not exclude that attention-based architectures with larger training corpora could close the gap.
 
 Out-of-sample temporal generalization is confirmed by applying the 2023-trained LightGBM to calendar year 2022: $R^2 = 0.908$, MAE = 1{,}514~MW over 8{,}593 hours. Because 2022 wholesale price data were not available at the time of this validation, the single lagged-price feature (\texttt{price\_lag24h}) is set to zero for the 2022 run; given its minor contribution to the trained model (1.1\% of total feature-importance gain, Appendix Fig.~\ref{fig:featimp}), this substitution is expected to have negligible impact on the reported 2022 metrics. Part of the higher 2022 $R^2$ reflects an intrinsically more predictable year (persistence itself improves from 0.736 to 0.822); the relevant evidence is that the model's \emph{skill over persistence} is preserved out of year (MAE gain of the same LightGBM model: $+21.6\%$ in 2022 vs.\ $+14.1\%$ on the 2023 test set), indicating durable seasonal and diurnal structure rather than year-specific artifacts.
 
@@ -550,7 +550,7 @@ Nuclear baseload value in CAISO is primarily \emph{economic} under typical opera
 
 \subsection{Comparison with Prior Literature}
 
-Our day-ahead net load skill ($+18.5\%$ over persistence) is consistent with, and slightly above, the 10--15\% gains reported in load forecasting competitions \citep{hong2016,hong2020review}, reflecting the greater variability of the net load target. The GBM-over-deep-learning result matches benchmark findings on moderate-scale tabular data \citep{hertel2022,shao2022,grinsztajn2022}. CQR coverage (88.8\% vs.\ 90\% target) aligns with \citet{romano2019} and \citet{stankovic2023}. Our nuclear value (\$2.3/MWh per GW) falls at the lower end of \citet{jenkins2018} estimates for generic U.S.\ systems, consistent with CAISO's large gas fleet and import capacity providing alternative flexibility, and with the firm-resource value identified by \citet{sepulveda2018}. The gas-price tipping point echoes \citet{bistline2023} but is derived from actual 2023 operational data rather than capacity-expansion models.
+Our day-ahead net load skill ($+18.5\%$ over persistence) is consistent with, and slightly above, the 10--15\% gains reported in load forecasting competitions \citep{hong2016,hong2020review}, reflecting the greater variability of the net load target. The GBM-over-deep-learning result matches benchmark findings on moderate-scale tabular data \citep{hertel2022,grinsztajn2022}. CQR coverage (88.8\% vs.\ 90\% target) aligns with \citet{romano2019}. Our nuclear value (\$2.3/MWh per GW) falls at the lower end of \citet{jenkins2018} estimates for generic U.S.\ systems, consistent with CAISO's large gas fleet and import capacity providing alternative flexibility, and with the firm-resource value identified by \citet{sepulveda2018}. The gas-price tipping point echoes \citet{bistline2023} but is derived from actual 2023 operational data rather than capacity-expansion models.
 
 \subsection{Limitations}
 
@@ -604,7 +604,7 @@ During the preparation of this work the author used the Claude Sonnet model (Ant
 
 This appendix reports supporting diagnostics referenced from Sections~\ref{sec:results_cv} and~\ref{sec:results_pi}.
 
-\textbf{Error diagnostics.} Formal residual tests (Table~\ref{tab:diag}) show left-skewed (skewness $-0.72$), non-Gaussian errors (Jarque--Bera and Shapiro--Wilk $p < 0.001$) with significant residual autocorrelation at 24 lags (Ljung--Box $p < 0.001$), expected for electricity data and immaterial for CQR, which is distribution-free; empirical coverage remains near-nominal, consistent with \citet{stankovic2023}. Hyperparameter sensitivity (Table~\ref{tab:hyper}) shows test $R^2$ varies by only 1.3 percentage points across an $8\times$ range of \texttt{num\_leaves}; the reported configuration (63 leaves) is selected on validation MAE, which it minimizes, confirming the selection is not test-set-driven despite \texttt{num\_leaves}$=31$ scoring marginally higher on the held-out test fold.
+\textbf{Error diagnostics.} Formal residual tests (Table~\ref{tab:diag}) show left-skewed (skewness $-0.72$), non-Gaussian errors (Jarque--Bera and Shapiro--Wilk $p < 0.001$) with significant residual autocorrelation at 24 lags (Ljung--Box $p < 0.001$), expected for electricity data and immaterial for CQR, which is distribution-free; empirical coverage remains near-nominal. Hyperparameter sensitivity (Table~\ref{tab:hyper}) shows test $R^2$ varies by only 1.3 percentage points across an $8\times$ range of \texttt{num\_leaves}; the reported configuration (63 leaves) is selected on validation MAE, which it minimizes, confirming the selection is not test-set-driven despite \texttt{num\_leaves}$=31$ scoring marginally higher on the held-out test fold.
 
 \begin{table}[htbp]
 \centering
@@ -808,7 +808,7 @@ Bienstock, D., Chertkov, M., Harnett, S., 2014. Chance-constrained optimal power
 Birge, J.R., Louveaux, F., 2011. \textit{Introduction to Stochastic Programming}, second ed. Springer, New York.
 
 \bibitem[Bistline et al.(2023)]{bistline2023}
-Bistline, J.E.T., Mehrotra, N.R., Wolfram, C., 2023. Economic implications of the climate provisions of the Inflation Reduction Act. \textit{Brookings Papers on Economic Activity} 2023(1), 77--152.
+Bistline, J.E.T., Mehrotra, N.R., Wolfram, C., 2023. Economic implications of the climate provisions of the Inflation Reduction Act. \textit{Brookings Papers on Economic Activity} 2023(1), 77--157.
 
 \bibitem[Breiman(2001)]{breiman2001}
 Breiman, L., 2001. Random forests. \textit{Machine Learning} 45(1), 5--32.
@@ -823,7 +823,7 @@ California Independent System Operator, 2023. 2023 Annual Report on Market Issue
 California State Legislature, 2022. Senate Bill No.~846: Diablo Canyon powerplant --- extension of operations. Sacramento, CA.
 
 \bibitem[Cany et al.(2018)]{cany2018}
-Cany, C., Mansilla, C., da Costa, P., Mathonni\`ere, G., 2018. Nuclear power supply: Going against the misconceptions. \textit{Energy Policy} 116, 42--56.
+Cany, C., Mansilla, C., Mathonni\`ere, G., da Costa, P., 2018. Nuclear power supply: Going against the misconceptions. Evidence of nuclear flexibility from the French experience. \textit{Energy} 151, 289--296.
 
 \bibitem[CARB(2023)]{carb2023}
 California Air Resources Board, 2023. Mandatory Greenhouse Gas Reporting Regulation: Default emission factor for unspecified imported electricity. Sacramento, CA.
@@ -835,19 +835,19 @@ Chen, T., Guestrin, C., 2016. XGBoost: A scalable tree boosting system. In: \tex
 Conejo, A.J., Carri\'on, M., Morales, J.M., 2010. \textit{Decision Making Under Uncertainty in Electricity Markets}. Springer, New York.
 
 \bibitem[Denholm et al.(2015)]{denholm2015}
-Denholm, P., O'Connell, M., Brinkman, G., Jorgenson, J., 2015. Overgeneration from solar energy in California: A field guide to the duck chart. Technical Report NREL/TP-6A20-60953, National Renewable Energy Laboratory.
+Denholm, P., O'Connell, M., Brinkman, G., Jorgenson, J., 2015. Overgeneration from solar energy in California: A field guide to the duck chart. Technical Report NREL/TP-6A20-65023, National Renewable Energy Laboratory.
 
-\bibitem[Denholm et al.(2023)]{denholm2023}
-Denholm, P., Brown, P., Cole, W., Mai, T., Sergi, B., et al., 2023. Examining supply-side options to achieve 100\% clean electricity by 2035. \textit{Renewable Energy} 206, 1028--1039.
+\bibitem[Denholm et al.(2022)]{denholm2022b}
+Denholm, P., Brown, P., Cole, W., Mai, T., Sergi, B., et al., 2022. Examining supply-side options to achieve 100\% clean electricity by 2035. Technical Report NREL/TP-6A40-81644, National Renewable Energy Laboratory, Golden, CO.
 
 \bibitem[Diebold and Mariano(1995)]{diebold1995}
 Diebold, F.X., Mariano, R.S., 1995. Comparing predictive accuracy. \textit{Journal of Business \& Economic Statistics} 13(3), 253--263.
 
-\bibitem[Dvorkin(2019)]{dvorkin2019}
-Dvorkin, Y., 2019. A chance-constrained stochastic electricity market. \textit{IEEE Transactions on Power Systems} 35(4), 2993--3003.
+\bibitem[Dvorkin(2020)]{dvorkin2019}
+Dvorkin, Y., 2020. A chance-constrained stochastic electricity market. \textit{IEEE Transactions on Power Systems} 35(4), 2993--3003.
 
-\bibitem[EPA(2023)]{epa2023}
-U.S.\ Environmental Protection Agency, 2023. Emissions \& Generation Resource Integrated Database (eGRID) 2022. Washington, DC.
+\bibitem[EPA(2024)]{epa2023}
+U.S.\ Environmental Protection Agency, 2024. Emissions \& Generation Resource Integrated Database (eGRID) 2022. Washington, DC.
 
 \bibitem[ERCOT(2023)]{ercot2023}
 Electric Reliability Council of Texas, 2023. 2023 Capacity, Demand and Reserves (CDR) Report. Austin, TX.
@@ -864,8 +864,8 @@ Grinsztajn, L., Oyallon, E., Varoquaux, G., 2022. Why do tree-based models still
 \bibitem[Hart et al.(2017)]{hart2017}
 Hart, W.E., Laird, C.D., Watson, J.-P., Woodruff, D.L., Hackebeil, G.A., Nicholson, B.L., Siirola, J.D., 2017. \textit{Pyomo---Optimization Modeling in Python}, second ed. Springer, New York.
 
-\bibitem[Hertel et al.(2022)]{hertel2022}
-Hertel, M., Ott, S., Sch\"afer, B., Neumann, D., 2022. Transformer training strategies for forecasting multiple load time series. \textit{Energy and AI} 8, 100147.
+\bibitem[Hertel et al.(2023)]{hertel2022}
+Hertel, M., Beichter, M., Heidrich, B., Neumann, O., Sch\"afer, B., Mikut, R., Hagenmeyer, V., 2023. Transformer training strategies for forecasting multiple load time series. \textit{Energy Informatics} 6(Suppl 1), 20.
 
 \bibitem[Hong and Fan(2016)]{hong2016}
 Hong, T., Fan, S., 2016. Probabilistic electric load forecasting: A tutorial review. \textit{International Journal of Forecasting} 32(3), 914--938.
@@ -906,8 +906,8 @@ Nuclear Energy Agency, 2011. Technical and Economic Aspects of Load Following wi
 \bibitem[NREL(2023)]{nrelatb2023}
 National Renewable Energy Laboratory, 2023. Annual Technology Baseline 2023. Golden, CO. \url{https://atb.nrel.gov}.
 
-\bibitem[Papavasiliou and Oren(2011)]{papavasiliou2011}
-Papavasiliou, A., Oren, S.S., 2011. Multiarea stochastic unit commitment for high wind penetration in a transmission constrained network. \textit{Operations Research} 61(3), 578--592.
+\bibitem[Papavasiliou and Oren(2013)]{papavasiliou2011}
+Papavasiliou, A., Oren, S.S., 2013. Multiarea stochastic unit commitment for high wind penetration in a transmission constrained network. \textit{Operations Research} 61(3), 578--592.
 
 \bibitem[Romano et al.(2019)]{romano2019}
 Romano, Y., Patterson, E., Cand\`es, E., 2019. Conformalized quantile regression. In: \textit{Advances in Neural Information Processing Systems} 32.
@@ -918,26 +918,17 @@ Schmidt, O., Melchior, S., Hawkes, A., Staffell, I., 2019. Projecting the future
 \bibitem[Sepulveda et al.(2018)]{sepulveda2018}
 Sepulveda, N.A., Jenkins, J.D., de Sisternes, F.J., Lester, R.K., 2018. The role of firm low-carbon electricity resources in deep decarbonization of power generation. \textit{Joule} 2(11), 2403--2420.
 
-\bibitem[Shao et al.(2022)]{shao2022}
-Shao, Z., Chao, F., Yang, S.-L., Zhou, K.-L., 2022. A review of the decomposition methodology for extracting and identifying the fluctuation characteristics in electricity demand forecasting. \textit{Renewable and Sustainable Energy Reviews} 163, 112507.
-
 \bibitem[Sioshansi et al.(2009)]{sioshansi2009}
 Sioshansi, R., Denholm, P., Jenkin, T., Weiss, J., 2009. Estimating the value of electricity storage in PJM: Arbitrage and some welfare effects. \textit{Energy Economics} 31(2), 269--277.
-
-\bibitem[Stankovic et al.(2023)]{stankovic2023}
-Stankovi\'c, L., Stankovi\'c, V., Liao, J., Wilson, C., 2023. Measuring the untapped potential of smart meter data for probabilistic forecasting of net demand. \textit{Renewable Energy} 205, 1091--1104.
 
 \bibitem[Vovk et al.(2005)]{vovk2005}
 Vovk, V., Gammerman, A., Shafer, G., 2005. \textit{Algorithmic Learning in a Random World}. Springer, New York.
 
 \bibitem[Wang et al.(2019)]{wang2019}
-Wang, Y., Zhang, N., Kang, C., Kirschen, D.S., Li, J., Xia, Q., 2019. Standardized matrix modeling of multiple energy systems. \textit{IEEE Transactions on Smart Grid} 10(1), 257--270.
+Wang, Y., Zhang, N., Kang, C., Kirschen, D.S., Yang, J., Xia, Q., 2019. Standardized matrix modeling of multiple energy systems. \textit{IEEE Transactions on Smart Grid} 10(1), 257--270.
 
 \bibitem[Weron(2014)]{weron2014}
 Weron, R., 2014. Electricity price forecasting: A review of the state-of-the-art with a look into the future. \textit{International Journal of Forecasting} 30(4), 1030--1081.
-
-\bibitem[Xu and Chen(2023)]{xu2023}
-Xu, C., Chen, H., 2023. Conformal prediction intervals for remaining useful life estimation and electricity price forecasting. \textit{Energy} 273, 127014.
 
 \bibitem[Zaffran et al.(2022)]{zaffran2022}
 Zaffran, M., F\'eron, O., Goude, Y., Josse, J., Dieuleveut, A., 2022. Adaptive conformal predictions for time series. In: \textit{Proceedings of the 39th International Conference on Machine Learning}, PMLR 162, pp.~25834--25866.
