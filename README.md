@@ -65,7 +65,7 @@ data from scratch.
 | Manuscript (Word) | `scripts/10_write_paper_docx.py` | `paper/manuscript.docx` |
 | Cover letter | `scripts/15_cover_letter.py` | `paper/cover_letter.docx` |
 
-The LaTeX manuscript is `paper/main.tex` (elsarticle; compile with `pdflatex` twice).
+The manuscript itself is not included in this repository; it is under review at Applied Energy and will be linked here upon publication.
 
 > **Note:** scripts 04–05b and 11 are earlier single-tier-gas iterations retained for
 > provenance; their outputs are superseded by scripts 16–21.

@@ -25,3 +25,12 @@ Thumbs.db
 # renamed copies of files already tracked elsewhere in this repo) - not
 # part of the citable code/data archive.
 submission_package/
+
+# Exported copy of exactly what gets pushed to GitHub (git archive output)
+github_upload/
+
+# Not part of the public reproduction package:
+# - Author_Notes.pdf: Elsevier's copyrighted guide-for-authors printout
+# - paper/: manuscript & submission documents (kept private until publication)
+Author_Notes.pdf
+paper/
