@@ -4,8 +4,7 @@ Reproduction package for the manuscript *"Data-Driven Nuclear Baseload and Batte
 Storage Dispatch Optimization under Duck Curve Uncertainty: A Conformalized Machine
 Learning Approach"* by Cagatay Kuban (submitted to Applied Energy, Elsevier).
 
-<!-- Once archived on Zenodo, replace this line with the DOI badge:
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.XXXXXXX.svg)](https://doi.org/10.5281/zenodo.XXXXXXX) -->
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21501015.svg)](https://doi.org/10.5281/zenodo.21501015)
 
 ## What this does
 
