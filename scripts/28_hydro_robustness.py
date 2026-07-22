@@ -113,7 +113,7 @@ fig, ax = plt.subplots(figsize=(12, 6))
 x = np.arange(len(res))
 w = 0.38
 ax.bar(x - w/2, res['Shed_Before_MWh'], width=w, color='#B71C1C', alpha=0.85,
-       label='Without hydro (as in Section 4.12)', edgecolor='black', lw=0.3)
+       label='Without hydro (stylized annual-sweep fleet)', edgecolor='black', lw=0.3)
 ax.bar(x + w/2, res['Shed_After_MWh'], width=w, color='#2E7D32', alpha=0.85,
        label='With realized 2023 hydro added', edgecolor='black', lw=0.3)
 ax.set_xticks(x)

@@ -233,16 +233,22 @@ savefig(fig, "fig01_timeseries_overview")
 print("Fig 02: Duck curve by season")
 pp["season"] = pp["month"].apply(get_season)
 
+# EIA timestamps are UTC; convert to local (US/Pacific) hours for the
+# hour-of-day panels so the duck belly appears at local midday.
+pp["hour_local"] = (
+    pp["period"].dt.tz_localize("UTC").dt.tz_convert("US/Pacific").dt.hour
+)
+
 fig, axes = plt.subplots(1, 2, figsize=(12, 5))
 
 # Left: Demand vs Net Load by season
 ax = axes[0]
 for season in ["Winter", "Spring", "Summer", "Fall"]:
     mask = pp["season"] == season
-    hourly = pp[mask].groupby("hour")["total_demand_MW"].mean()
+    hourly = pp[mask].groupby("hour_local")["total_demand_MW"].mean()
     ax.plot(hourly.index, hourly.values, color=SEASON_COLORS[season],
             lw=1.2, ls="--", alpha=0.7)
-    hourly_nl = pp[mask].groupby("hour")["net_load_MW"].mean()
+    hourly_nl = pp[mask].groupby("hour_local")["net_load_MW"].mean()
     ax.plot(hourly_nl.index, hourly_nl.values, color=SEASON_COLORS[season],
             lw=2, label=f"{season}")
 
@@ -258,10 +264,10 @@ ax.yaxis.set_major_formatter(mticker.FuncFormatter(lambda x, _: f"{x/1e3:.0f}k")
 ax2 = axes[1]
 for season in ["Winter", "Spring", "Summer", "Fall"]:
     mask = pp["season"] == season
-    solar_h = pp[mask].groupby("hour")["gen_sun_MW"].mean()
+    solar_h = pp[mask].groupby("hour_local")["gen_sun_MW"].mean()
     ax2.plot(solar_h.index, solar_h.values, color=SEASON_COLORS[season],
              lw=2, label=f"{season} Solar")
-gen_wind_hourly = pp.groupby("hour")["gen_wnd_MW"].mean()
+gen_wind_hourly = pp.groupby("hour_local")["gen_wnd_MW"].mean()
 ax2.plot(gen_wind_hourly.index, gen_wind_hourly.values, color="gray",
          lw=2, ls="--", label="Wind (annual avg)")
 ax2.set_xlabel("Hour of Day")
@@ -516,39 +522,13 @@ savefig(fig, "fig08_price_prediction_PI")
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# FIGURE 09: Feature Importance (Top 15 for both targets)
+# FIGURE 09: Feature Importance — SUPERSEDED, DO NOT REGENERATE HERE.
+# The canonical fig09_feature_importance.png is produced by
+# 27_feature_importance_fix.py (XGBoost, 35-feature canonical net load model).
+# This block used stale demand-forecasting CSVs and silently overwrote the
+# correct figure whenever this script was rerun, so it is disabled.
 # ══════════════════════════════════════════════════════════════════════════════
-print("Fig 09: Feature importance")
-fig, axes = plt.subplots(1, 2, figsize=(12, 6))
-
-for ax, fi_df, title, color in [
-    (axes[0], fi_netload, "Net Load (Day-Ahead)", "#1E88E5"),
-    (axes[1], fi_price, "Price (Day-Ahead)", "#E53935"),
-]:
-    top15 = fi_df.head(15).copy()
-    top15 = top15.sort_values("importance", ascending=True)  # bottom-up
-    # Normalize importance to percentage
-    total = top15["importance"].sum()
-    top15["pct"] = top15["importance"] / fi_df["importance"].sum() * 100
-
-    # Clean feature names
-    top15["feature_clean"] = (top15["feature"]
-        .str.replace("_", " ").str.replace("MW", "").str.strip()
-        .str.replace("  ", " "))
-
-    bars = ax.barh(range(len(top15)), top15["pct"].values, color=color, alpha=0.7,
-                   edgecolor="white", lw=0.5)
-    ax.set_yticks(range(len(top15)))
-    ax.set_yticklabels(top15["feature_clean"].values, fontsize=8)
-    ax.set_xlabel("Relative Importance (%)")
-    ax.set_title(f"Top 15 Features: {title}")
-
-    for i, v in enumerate(top15["pct"].values):
-        ax.text(v + 0.3, i, f"{v:.1f}%", va="center", fontsize=7)
-
-fig.suptitle("LightGBM Feature Importance (Day-Ahead Models)", fontsize=13, fontweight="bold")
-fig.tight_layout()
-savefig(fig, "fig09_feature_importance")
+print("Fig 09: skipped (canonical version produced by 27_feature_importance_fix.py)")
 
 
 # ══════════════════════════════════════════════════════════════════════════════

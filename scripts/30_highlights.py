@@ -7,7 +7,7 @@ from docx.shared import Pt
 HIGHLIGHTS = [
     'True CAISO net load from EIA fuel-type data reveals a 55 GW duck curve depth.',
     'XGBoost day-ahead forecast: R2 = 0.854, +18.5% skill over persistence.',
-    'CQR-robust MILP matches stochastic programming with 40% fewer binary variables.',
+    'CQR-robust MILP matches stochastic programming with 29% fewer binary variables.',
     'Nuclear premium is 13% in typical weeks but reaches 210% under capacity stress.',
     'Robust dispatch trades +4.2% cost for +21.8% CO2, an emissions-abatement lever.',
 ]
