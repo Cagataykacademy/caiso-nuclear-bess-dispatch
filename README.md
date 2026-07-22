@@ -2,7 +2,10 @@
 
 Reproduction package for the manuscript *"Data-Driven Nuclear Baseload and Battery
 Storage Dispatch Optimization under Duck Curve Uncertainty: A Conformalized Machine
-Learning Approach"* (submitted to Energy).
+Learning Approach"* by Cagatay Kuban (submitted to Applied Energy, Elsevier).
+
+<!-- Once archived on Zenodo, replace this line with the DOI badge:
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.XXXXXXX.svg)](https://doi.org/10.5281/zenodo.XXXXXXX) -->
 
 ## What this does
 
@@ -28,8 +31,16 @@ An end-to-end pipeline on real CAISO 2022–2023 data:
 pip install -r requirements.txt
 ```
 
-An EIA API key (free, https://www.eia.gov/opendata/) is required for the data-acquisition
-scripts; set it inside `scripts/01*.py`. All downstream scripts run from the CSVs in `data/`.
+An EIA API key (free, https://www.eia.gov/opendata/register.php) is required for the
+data-acquisition scripts; set it as an environment variable before running them:
+
+```bash
+export EIA_API_KEY="your-key-here"
+```
+
+All downstream scripts (ML, CQR, MILP, sensitivity sweeps) run entirely from the CSVs
+already provided in `data/` — the API key is only needed if you want to re-fetch raw
+data from scratch.
 
 ## Reproduction order
 

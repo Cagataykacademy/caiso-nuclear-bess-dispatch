@@ -20,3 +20,8 @@ Thumbs.db
 
 # Claude Code local session/config state - not part of the research artifact
 .claude/
+
+# Local staging area for the Elsevier Editorial Manager upload (duplicate
+# renamed copies of files already tracked elsewhere in this repo) - not
+# part of the citable code/data archive.
+submission_package/

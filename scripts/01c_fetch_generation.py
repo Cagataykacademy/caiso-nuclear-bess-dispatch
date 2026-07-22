@@ -17,7 +17,7 @@ sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='repla
 warnings.filterwarnings("ignore")
 
 DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data")
-EIA_API_KEY = "DEMO_KEY"
+EIA_API_KEY = os.environ.get("EIA_API_KEY", "DEMO_KEY")
 RESPONDENT = "CISO"
 START_DATE = "2023-01-01"
 END_DATE   = "2023-12-31"

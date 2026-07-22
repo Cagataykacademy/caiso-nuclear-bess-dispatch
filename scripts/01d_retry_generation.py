@@ -10,7 +10,7 @@ sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='repla
 warnings.filterwarnings("ignore")
 
 DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data")
-EIA_API_KEY = "DEMO_KEY"
+EIA_API_KEY = os.environ.get("EIA_API_KEY", "DEMO_KEY")
 BASE_URL = "https://api.eia.gov/v2"
 
 import urllib.request, urllib.parse, urllib.error, ssl

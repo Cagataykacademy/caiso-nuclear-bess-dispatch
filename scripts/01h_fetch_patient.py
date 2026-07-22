@@ -9,7 +9,7 @@ sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='repla
 sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
 sys.stdout.reconfigure(line_buffering=True)
 
-API_KEY = "DEMO_KEY"
+API_KEY = os.environ.get("EIA_API_KEY", "DEMO_KEY")
 DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data")
 DELAY = 120  # 2 min between requests (DEMO_KEY: 30/hr = 1 every 2 min)
 

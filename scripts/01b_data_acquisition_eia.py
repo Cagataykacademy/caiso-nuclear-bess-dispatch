@@ -41,7 +41,7 @@ os.makedirs(DATA_DIR, exist_ok=True)
 # EIA API v2 - Free registration key
 # Register at: https://www.eia.gov/opendata/register.php
 # For demonstration, we use the demo key (limited rate)
-EIA_API_KEY = "DEMO_KEY"  # Replace with your own key for production
+EIA_API_KEY = os.environ.get("EIA_API_KEY", "DEMO_KEY")
 
 # CAISO region identifier in EIA
 RESPONDENT = "CISO"  # California ISO
