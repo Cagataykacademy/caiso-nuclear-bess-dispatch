@@ -75,9 +75,24 @@ The manuscript itself is not included in this repository; it is under review at 
 
 ## Data sources (all public)
 
-- EIA Form 930 Hourly Electric Grid Monitor — https://api.eia.gov
-- EIA/ICE wholesale electricity prices (SP15 DA LMP peak)
-- NOAA ISD-Lite (stations: LAX, SFO, FAT) — https://www.ncei.noaa.gov
+All raw inputs are from official, publicly available sources:
+
+- **EIA Form 930** Hourly Electric Grid Monitor (demand, generation-by-fuel,
+  interchange for CAISO and ERCOT) — https://www.eia.gov/electricity/gridmonitor/
+  (API: https://api.eia.gov). U.S. Government work, public domain.
+- **EIA Henry Hub** natural gas spot price — https://www.eia.gov/dnav/ng/
+- **NOAA Integrated Surface Database** (stations LAX, SFO, Fresno) —
+  https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database
+- **EIA/ICE Wholesale Electricity Market Data** (SP15 EZ Gen DA LMP Peak) —
+  https://www.eia.gov/electricity/wholesale/
+  > Note: the SP15 price series is derived from EIA's wholesale market data,
+  > which EIA publishes with permission from Intercontinental Exchange (ICE),
+  > which retains rights to the underlying data. The **raw ICE spreadsheet is
+  > therefore not redistributed here**; download it from the EIA link above.
+  > The derived daily aggregate used by the pipeline
+  > (`data/caiso_daily_electricity_price_2023.csv`) is included. Prices enter
+  > the study only as lagged exploratory features (1.1% of model importance)
+  > and are not used by the MILP, which uses fixed technology costs.
 - Emission factors: EPA eGRID 2022; CARB MRR default for unspecified imports (0.428 t/MWh)
 
 ## License
